@@ -1,54 +1,69 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema(
+  {
     email: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     password: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
-    role: { 
-        type: String,
-        required: true,
-        enum: ["user", "admin"],
-        default: "user"
+    role: {
+      type: String,
+      required: true,
+      enum: ["user", "admin"],
+      default: "user",
     },
     phone: {
-        type: String,
+      type: String,
     },
     address: {
-        type: String,
+      type: String,
     },
     cart: {
-        products: [
-            {
-                productId: {
-                    type: Schema.Types.ObjectId,
-                    ref: "Product",
-                    required: true,
-                },
-                quantity: {
-                    type: Number,
-                    required: true,
-                    default: 1
-                }
-            }
-        ],
-        totalPrice: {
+      products: [
+        {
+          productId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Product",
+            required: true,
+          },
+          quantity: {
             type: Number,
             required: true,
-            min: 0,
-            default: 0
-        }
+            default: 1,
+          },
+        },
+      ],
+      totalPrice: {
+        type: Number,
+        required: true,
+        min: 0,
+        default: 0,
+      },
+    },
+  },
+  { timestamps: true }
+);
+userSchema.statics.getByEmail = async (email) => {
+  try {
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      const error = new Error("Cannot find user");
+      error.statusCode(404);
+      throw error;
     }
-}, { timestamps: true });
-
+    return user;
+  } catch (error) {
+    throw error;
+  }
+};
 // userSchema.statics.getById = async (id, select, options) => {
 //     try {
 //         const user = await User.findById(id, select).populate(options);
@@ -79,5 +94,5 @@ const userSchema = new mongoose.Schema({
 //     }
 // }
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 export default User;

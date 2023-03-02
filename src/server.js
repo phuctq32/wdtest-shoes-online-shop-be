@@ -10,4 +10,4 @@ db.once("open", () => {
   app.run();
 });
 
-// addUser("helloworld2023@gmail.com", "123123", "hello");
+// addUser("customer@gmail.com", "123123", "hello", false);

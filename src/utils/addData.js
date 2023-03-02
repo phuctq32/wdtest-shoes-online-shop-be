@@ -1,3 +1,5 @@
+import Product from "../models/product.js";
+import User from "../models/user.js";
 // const addData = async () => {
 //   try {
 //     const product = await Product.create({
@@ -21,3 +23,16 @@
 //   }
 // };
 // addData();
+
+export const addUser = async () => {
+  try {
+    const user = await User.create({
+      email: "testing@gmail.com",
+      name: "hehehehe",
+      password: "123123",
+      role: "admin",
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};

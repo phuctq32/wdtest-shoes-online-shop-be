@@ -6,7 +6,7 @@ const login = async (email, password) => {
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       const error = new Error("Unauthorized");
-      error.statusCode(401);
+      error.statusCode = 401;
       throw error;
     }
 
@@ -15,9 +15,10 @@ const login = async (email, password) => {
       "secret-key",
       { expiresIn: "2h" }
     );
+    console.log(token);
     return { token, user };
   } catch (error) {
-    error.statusCode(500);
+    console.log(error);
     throw error;
   }
 };

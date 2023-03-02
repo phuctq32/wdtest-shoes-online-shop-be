@@ -1,5 +1,6 @@
 import * as app from "./app.js";
 import db from "./configs/database.js";
+import { addUser } from "./utils/addData.js";
 import Product from "./models/product.js";
 app.init();
 
@@ -9,4 +10,4 @@ db.once("open", () => {
   app.run();
 });
 
-
+addUser();

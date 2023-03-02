@@ -55,8 +55,7 @@ userSchema.statics.getByEmail = async (email) => {
   try {
     const user = await User.findOne({ email: email });
     if (!user) {
-      const error = new Error("Cannot find user");
-      error.code = 404;
+      const error = new AppError(404, "Cannot find user");
       throw error;
     }
     console.log(user);

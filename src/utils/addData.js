@@ -25,15 +25,15 @@ import bcrypt from "bcryptjs";
 // };
 // addData();
 
-export const addUser = async (password) => {
+export const addUser = async (email, password, name) => {
   const salt = 10;
   const encriptPass = await bcrypt.hash(password, 7);
   try {
     const user = await User.create({
-      email: "testing@gmail.com",
-      name: "hehehehe",
+      email: email,
+      name: name,
       password: encriptPass,
-      role: "admin",
+      //   role: "admin",
     });
   } catch (error) {
     console.log(error);

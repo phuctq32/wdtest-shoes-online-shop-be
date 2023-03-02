@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import routes from "./routes/index.js";
+import errorHandler from "./middlewares/errorHandler.js";
 
 dotenv.config();
 
@@ -17,7 +18,13 @@ const init = () => {
         allowHeaders: ['Content-Type', 'Authorization']
     }));
 
-    app.use(routes);
+    app.use("/api", routes);
+
+    app.use((req, res) => {
+        res.status(404).json({ message: "NOT FOUND" });
+    })
+
+    app.use(errorHandler)
 }
 
 const run = () => {

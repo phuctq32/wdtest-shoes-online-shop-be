@@ -1,5 +1,6 @@
 import bcrypt from "bcryptjs";
 import User from "../models/user.js";
+import jwt from "jsonwebtoken";
 const login = async (email, password) => {
   try {
     const user = await User.getByEmail(email);
@@ -11,11 +12,11 @@ const login = async (email, password) => {
     }
 
     const token = jwt.sign(
-      { email: email, userID: user._userID.toString() },
+      { email: email, userID: user._id.toString() },
       "secret-key",
       { expiresIn: "2h" }
     );
-    console.log(token);
+    // console.log(token);
     return { token, user };
   } catch (error) {
     console.log(error);

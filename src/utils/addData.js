@@ -1,5 +1,6 @@
 import Product from "../models/product.js";
 import User from "../models/user.js";
+import bcrypt from "bcryptjs";
 // const addData = async () => {
 //   try {
 //     const product = await Product.create({
@@ -24,12 +25,14 @@ import User from "../models/user.js";
 // };
 // addData();
 
-export const addUser = async () => {
+export const addUser = async (password) => {
+  const salt = 10;
+  const encriptPass = await bcrypt.hash(password, 7);
   try {
     const user = await User.create({
       email: "testing@gmail.com",
       name: "hehehehe",
-      password: "123123",
+      password: encriptPass,
       role: "admin",
     });
   } catch (error) {

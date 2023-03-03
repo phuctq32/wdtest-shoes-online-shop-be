@@ -20,12 +20,11 @@ const getByID = async function (userId) {
 };
 const edit = async (userId, update) => {
   try {
-    if (update.password || update.role || update.email) {
-      // can not change password, role and email
+    if (update.password || update.role || update.email || update.cart) {
+      // can not change password, role, email and cart
       const error = new AppError(405, "METHOD_NOT_ALLOWED");
       throw error;
     }
-    // const user = await User.findOneAndUpdate({ _id: userId });
     const user = await User.findOneAndUpdate({ _id: userId }, update, {
       new: true,
     });

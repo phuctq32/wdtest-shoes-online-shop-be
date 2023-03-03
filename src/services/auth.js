@@ -6,13 +6,15 @@ import User from "../models/user.js";
 import Token from "../models/token.js";
 import AppError from "../utils/error.js";
 import sendEmail, { get_html_reset_password } from "../utils/sendEmail.js";
-import AppError from "../utils/error.js";
 
 dotenv.config();
 
-const login = async (email, password) => {
+export const login = async (email, password) => {
   try {
-    const user = await User.getByEmail(email);
+    const user = await User.findOne({ email: email });
+    if (!user) {
+        throw new AppError("User not found");
+    }
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       const error = new AppError(401, "Unauthorized");
@@ -25,7 +27,7 @@ const login = async (email, password) => {
       { expiresIn: "2h" }
     );
     console.log(token);
-    return { token, user };
+    return token;
   } catch (error) {
     throw error;
   }

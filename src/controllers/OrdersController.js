@@ -6,55 +6,64 @@ var curDate = new Date();
 async function createReceipt(req, res) {
     let userID = req.body.userID;
     let products = req.body.products;
-    let customerInfo = req.body.customerInfo;
 
-
-    let productsOrdered;
+    let productsOrdered = [];
     for (var i in products) {
-        productsOrdered += await Product.find({ _id: products[i].productID});
+        const item = await Product.findOne({ _id: products[i].productID });
+        productsOrdered.push({
+            productId: item._id,
+            price: item.price,
+            name: item.name,
+            quantity: products[i].quantity,
+            discount: item.discount
+        });
     }
 
     let sumPrice = 0;
     for (var i in productsOrdered) {
-        sumPrice += (productsOrdered[i].quantity * productsOrdered[i].price)* (1-productsOrdered[i].discount) ;
+        sumPrice += (parseInt(products[i].quantity) * productsOrdered[i].price) * (1 - productsOrdered[i].discount / 100);
+        delete productsOrdered[i].discount;
     }
+    console.log(sumPrice)
 
-    var customerInfor;
+    var customerInfor = {
+        name: "",
+        email: "",
+        phone: "",
+        address: ""
+    };
+
     if (userID) {
         customerInfor = await User.findOne({ _id: userID });
     }
+    else {
+        customerInfor = req.body.customerInfo;
+    }
     var bill = {
-        userID : userID,
-        products: products,
+        userID: userID,
+        products: productsOrdered,
         state: "paid",
         date: curDate,
         totalPrice: sumPrice,
-        userId: userID ? userID : null,
-        customerInfo: null,
+        userId: userID ? userID : "guest",
         customerInfo: {
             name: customerInfor.name,
-            email:customerInfor.email,
+            email: customerInfor.email,
             phone: customerInfor.phone,
-            address:customerInfor.address,
-
-            // name: "Hieu",
-            // email: "a@a",
-            // phone: 111,
-            // address: "customerInfor.address",
-        },
+            address: customerInfor.address
+        }
     }
-
+    console.log(bill);
     const doc = await Receipt.create(bill);
     await doc.save();
-
-    res.status(200).json({ message: "Thành công" });
+    return res.send("Thành công");
 }
 async function getReceipt(req, res) {
     let receipts = await Receipt.find({ userId: req.body.userID });
     res.json(receipts);
-    //res.status(200).json({ message: "Thành công" });
 
-   
+
+
 }
 
 export default {

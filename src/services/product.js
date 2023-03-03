@@ -1,4 +1,5 @@
 import Product from "../models/product.js";
+import Brand from "../models/brand.js";
 import AppError from "../utils/error.js";
 
 export const createProduct = async (productData) => {
@@ -31,10 +32,17 @@ export const createProduct = async (productData) => {
 
 export const getProductsWithConditions = async (filter) => {
     try {
-        
-        const products = await Product.find({ brandName: filter.brandName ? filter.brandName : { $ne: null } })
-            .limit(filter.limit)
+        let brand;
+        if (filter.brandName) {
+            brand = await Brand.findOne({ name: filter.brandName.toString().toUpperCase()});
+            if (!brand) {
+                throw new AppError(404, "Resource not found");
+            }
+        }
+
+        const products = await Product.find({ brand: brand ? brand._id : { $ne: null } })
             .skip((filter.page - 1) * filter.limit)
+            .limit(filter.limit)
             .sort({ createdAt: -1 });
 
         return products;

@@ -30,7 +30,7 @@ export const getProducts = async (req, res, next) => {
 
         let limit = req.query.limit ? parseInt(req.query.limit) : null;
         if (limit & limit <= 0) {
-            limit = 5;
+            limit = 16;
         }
 
         const brandName = req.query.brandName ? req.query.brandName : null;

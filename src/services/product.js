@@ -1,6 +1,5 @@
 import Product from "../models/product.js";
 import AppError from "../utils/error.js";
-import { upload } from "../utils/imageHandler.js";
 
 export const createProduct = async (productData) => {
     try {
@@ -25,6 +24,16 @@ export const createProduct = async (productData) => {
 
         await newProduct.save();
 
+    } catch (err) {
+        throw err;
+    }
+}
+
+export const getProductsWithConditions = async (filter) => {
+    try {
+        const products = await Product.find().sort({ createdAt: -1 });
+
+        return products;
     } catch (err) {
         throw err;
     }

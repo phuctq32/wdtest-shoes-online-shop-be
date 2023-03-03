@@ -7,5 +7,8 @@ const router = Router();
 // These APIs are used by admin
 router.post("/products", productValidations, productController.createProduct);
 
+// APIs for user
+router.get("/products", productController.getProducts);
+
 
 export default router;

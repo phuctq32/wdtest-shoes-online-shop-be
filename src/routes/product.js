@@ -10,5 +10,7 @@ router.post("/products", productValidations, productController.createProduct);
 // APIs for user
 router.get("/products", productController.getProducts);
 
+router.get("/products/:productId", productController.getProductById);
+
 
 export default router;

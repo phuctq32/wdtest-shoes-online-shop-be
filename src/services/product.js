@@ -38,3 +38,16 @@ export const getProductsWithConditions = async (filter) => {
         throw err;
     }
 }
+
+export const getProductById = async (id) => {
+    try {
+        const product = await Product.findById(id);
+        if (!product) {
+            throw new AppError(404, "Resource not found");
+        }
+
+        return product;
+    } catch (err) {
+        throw err;
+    }
+}

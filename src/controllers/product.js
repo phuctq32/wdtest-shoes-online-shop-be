@@ -31,3 +31,13 @@ export const getProducts = async (req, res, next) => {
     }
 }
 
+export const getProductById = async (req, res, next) => {
+    try {
+        const product = await productService.getProductById(req.params.productId);
+
+        res.status(200).json({ product })
+    } catch (err) {
+        next(err);
+    }
+}
+

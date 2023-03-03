@@ -1,5 +1,5 @@
-import User from "../models/user";
-import AppError from "../utils/error";
+import User from "../models/user.js";
+import AppError from "../utils/error.js";
 
 const isAdmin = async (req, res, next) => {
     const userId = req.userId;

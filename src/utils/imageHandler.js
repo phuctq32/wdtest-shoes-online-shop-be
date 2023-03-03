@@ -1,13 +1,13 @@
-import cloudinary from '../../configs/cloudinary.js';
+import cloudinary from '../configs/cloudinary.js';
 
 const upload = (file, options) => {    
     return new Promise((resolve, reject) => {
         cloudinary.uploader.upload(
             file,
-            {
-                public_id: options.fileName,
-                folder: options.folder
-            },
+            // {
+            //     public_id: options.fileName,
+            //     folder: options.folder
+            // },
             (err, res) => {
                 if (err) {
                     return reject(err);

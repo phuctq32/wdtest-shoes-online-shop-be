@@ -11,10 +11,9 @@ const productSchema = new Schema({
         type: String,
         required: true,
     },
-    image: {
-        url: { type: String, required: true },
-        width: { type: Number, required: true },
-        height: { type: Number, required: true }
+    image: { 
+        type: String, 
+        required: true 
     },
     description: { 
         type: String,
@@ -23,9 +22,13 @@ const productSchema = new Schema({
         type: String,
         required: true,
     },
-    size: {
-        type: Number
-    },
+    sizes: [ 
+        {
+            name: { type: String, required: true },
+            quantity: { type: Number, required: true },
+            sold: { type: Number, default: 0, required: true }
+        }
+    ],
     price: {
         type: Number,
         required: true,
@@ -33,9 +36,14 @@ const productSchema = new Schema({
     discount: {
         type: Number,
         required: true,
+        default: 0,
+        min: 0,
+        max: 1
     },
     status: {
         type: String,
+        enum: ["active", "deleted"],
+        default: "active"
     }
 }, { timestamps: true});
 

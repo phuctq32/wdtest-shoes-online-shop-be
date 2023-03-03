@@ -17,3 +17,28 @@ export const signup = async (req, res, next) => {
         next(err);
     }
 }
+
+export const forgotPassword = async (req, res, next) => {
+    try {
+        const token = await authService.forgotPassword(req.body.email);
+
+        res.status(200).json({
+            message: 'An email was sent to your email account. Please check to reset your password!',
+            token: token,
+        })
+    } catch (err) {
+        next(err);
+    }
+}
+
+export const resetPassword = async (req, res, next) => {
+    try {
+        await authService.resetPassword(req.params.token, req.body.password);
+
+        res.status(200).json({
+            message: 'Reset password successfully!'
+        });
+    } catch (err) {
+        next(err);
+    }
+}

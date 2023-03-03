@@ -5,10 +5,12 @@ const Schema = mongoose.Schema;
 const brandSchema = new Schema({
     name: {
         type: String,
-        required: true,
+        uppercase: true,
+        required: true
     }, 
     description: {
         type: String,
+        default: "Không có",
     }
 })
 

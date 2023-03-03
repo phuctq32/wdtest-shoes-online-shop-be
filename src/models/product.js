@@ -7,8 +7,9 @@ const productSchema = new Schema({
         type: String,
         required: true,
     },
-    brandName: {
-        type: String,
+    brand: {
+        type: Schema.Types.ObjectId,
+        ref: "Brand",
         required: true,
     },
     image: { 

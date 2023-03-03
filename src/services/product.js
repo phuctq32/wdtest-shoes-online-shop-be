@@ -31,7 +31,11 @@ export const createProduct = async (productData) => {
 
 export const getProductsWithConditions = async (filter) => {
     try {
-        const products = await Product.find().sort({ createdAt: -1 });
+        
+        const products = await Product.find({ brandName: filter.brandName ? filter.brandName : { $ne: null } })
+            .limit(filter.limit)
+            .skip((filter.page - 1) * filter.limit)
+            .sort({ createdAt: -1 });
 
         return products;
     } catch (err) {

@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-
 const Schema = mongoose.Schema;
 
 const receiptSchema = new mongoose.Schema({
@@ -29,8 +28,9 @@ const receiptSchema = new mongoose.Schema({
         required: true,
     },
     userId: {
-        type: Schema.Types.ObjectId,
-        ref: "User",
+        //type: Schema.Types.ObjectId,
+        type: String,
+        // ref: "User",
         required: false
     },
     customerInfo: {

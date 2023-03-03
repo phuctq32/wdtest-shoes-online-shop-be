@@ -53,8 +53,7 @@ const userSchema = new mongoose.Schema(
 );
 userSchema.statics.getByID = async function (userID) {
   try {
-    const user = await this.findOne({ _id: userID }).cart.populate("products");
-
+    const user = await this.findOne({ _id: userID });
     // const user = await this.findOne({ _id: userID });
     if (!user) {
       const error = new AppError(404, "USER_NOT_FOUND");

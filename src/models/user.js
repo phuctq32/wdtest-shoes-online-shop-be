@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+import AppError from "../utils/error.js";
 const userSchema = new mongoose.Schema(
   {
     email: {
@@ -51,11 +51,13 @@ const userSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-userSchema.statics.getByEmail = async (email) => {
+userSchema.statics.getByID = async function (userID) {
   try {
-    const user = await User.findOne({ email: email });
+    const user = await this.findOne({ _id: userID }).cart.populate("products");
+
+    // const user = await this.findOne({ _id: userID });
     if (!user) {
-      const error = new AppError(404, "Cannot find user");
+      const error = new AppError(404, "USER_NOT_FOUND");
       throw error;
     }
     console.log(user);

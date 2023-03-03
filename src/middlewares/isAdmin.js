@@ -9,12 +9,4 @@ export const isAdmin = async (req, res, next) => {
     return next(error);
   }
   return res.status(200).json("You are administrator");
-  //   try {
-  //     const result = jwt.verify(token, process.env.SECRET_KEY);
-  //     req.userId = result.userID;
-  //     req.role = result.role;
-  //     next();
-  //   } catch (error) {
-  //     next(error);
-  //   }
 };

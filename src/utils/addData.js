@@ -25,7 +25,7 @@ import bcrypt from "bcryptjs";
 // };
 // addData();
 
-export const addUser = async (email, password, name) => {
+export const addUser = async (email, password, name, isAdmin) => {
   const salt = 10;
   const encriptPass = await bcrypt.hash(password, 7);
   try {
@@ -33,7 +33,7 @@ export const addUser = async (email, password, name) => {
       email: email,
       name: name,
       password: encriptPass,
-      //   role: "admin",
+      role: isAdmin ? "admin" : "user",
     });
   } catch (error) {
     console.log(error);

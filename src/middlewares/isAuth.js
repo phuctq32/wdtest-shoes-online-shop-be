@@ -13,7 +13,7 @@ export const isAuth = async (req, res, next) => {
   console.log(token);
   try {
     const result = jwt.verify(token, process.env.SECRET_KEY);
-    req.userId = result.userID;
+    req.userID = result.userID;
     req.role = result.role;
     next();
   } catch (error) {

@@ -10,4 +10,4 @@ db.once("open", () => {
   app.run();
 });
 
-// addUser("customer@gmail.com", "123123", "hello", false);
+// addUser("buyproduct@gmail.com", "123123", "hello", false, );

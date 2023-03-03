@@ -20,18 +20,17 @@ const getByID = async function (userId) {
 };
 const edit = async (userId, update) => {
   try {
-    if (update.password || update.role || update.email || update.cart) {
-      // can not change password, role, email and cart
-      const error = new AppError(405, "METHOD_NOT_ALLOWED");
-      throw error;
+    const user = await User.findById(userId);
+    if (update.name) {
+      user.name = update.name;
     }
-    const user = await User.findOneAndUpdate({ _id: userId }, update, {
-      new: true,
-    });
-    if (!user) {
-      const error = new AppError(404, "USER_NOT_FOUND");
-      throw error;
+    if (update.phone) {
+      user.phone = update.phone;
     }
+    if (update.address) {
+      user.address = update.address;
+    }
+    await user.save();
     console.log(user);
     return user;
   } catch (error) {
@@ -46,14 +45,10 @@ const editPassword = async (userId, oldPassword, newPassword) => {
       const error = new AppError(404, "USER_NOT_FOUND");
       throw error;
     }
-    if (!oldPassword || !newPassword) {
-      const error = new AppError(400, "MISSING_PASSWORD");
-      throw error;
-    }
     const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
     if (!isPasswordValid) {
       const error = new AppError(409, "WRONG_PASSWORD");
-      throw error;
+      next(error);
     }
     const hashedPassword = await bcrypt.hash(newPassword, 7);
     user.password = hashedPassword;

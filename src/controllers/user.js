@@ -1,5 +1,5 @@
 import { userService } from "../services/user.js";
-// import AppError from "../utils/error.js";
+import AppError from "../utils/error.js";
 
 const getProfile = async (req, res, next) => {
   const userId = req.userId;
@@ -14,9 +14,10 @@ const getProfile = async (req, res, next) => {
 
 const editProfile = async (req, res, next) => {
   const userId = req.userId;
-  const update = req.body;
+  const { name, phone, address } = req.body;
+
   try {
-    await userService.edit(userId, update);
+    await userService.edit(userId, { name, phone, address });
     res.status(200).json({ message: "UPDATE_SUCCESSFULLY" });
   } catch (error) {
     next(error);
@@ -28,6 +29,10 @@ const editPassword = async (req, res, next) => {
   const userId = req.userId;
   const oldPassword = req.body.oldPassword;
   const newPassword = req.body.newPassword;
+  if (!oldPassword || !newPassword) {
+    const error = new AppError(400, "MISSING_PASSWORD");
+    next(error);
+  }
   try {
     const token = await userService.editPassword(
       userId,

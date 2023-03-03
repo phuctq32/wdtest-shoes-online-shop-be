@@ -1,9 +1,35 @@
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
 import User from "../models/user.js";
 import Token from "../models/token.js";
 import AppError from "../utils/error.js";
 import sendEmail, { get_html_reset_password } from "../utils/sendEmail.js";
+import AppError from "../utils/error.js";
+
+dotenv.config();
+
+const login = async (email, password) => {
+  try {
+    const user = await User.getByEmail(email);
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      const error = new AppError(401, "Unauthorized");
+      throw error;
+    }
+    console.log(process.env.SECRET_KEY);
+    const token = jwt.sign(
+      { email: email, userID: user._id.toString(), role: user.role },
+      process.env.SECRET_KEY,
+      { expiresIn: "2h" }
+    );
+    console.log(token);
+    return { token, user };
+  } catch (error) {
+    throw error;
+  }
+};
 
 export const signup = async (userData) => {
     try {
@@ -44,6 +70,7 @@ export const forgotPassword = async (recipientEmail) => {
             throw new AppError(404, "Resource not found");
         }
         
+
         const token = new Token({
             value: tokenString,
             expiredAt: Date.now() + 3600000,

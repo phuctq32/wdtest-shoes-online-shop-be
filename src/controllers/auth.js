@@ -1,5 +1,15 @@
 import * as authService from "../services/auth.js";
 
+export const login = async (req, res, next) => {
+  const { email, password } = req.body;
+  try {
+    const { token, user } = await authService.login(email, password);
+    res.status(200).json({ token, user });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const signup = async (req, res, next) => {
     try {
         const userData = {

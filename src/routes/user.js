@@ -6,5 +6,6 @@ const router = Router();
 
 router.get("/profile", isAuth, userController.getProfile);
 router.get("/is-admin", isAuth, isAdmin);
-router.get("/edit-profile", isAuth, isAdmin);
+router.put("/edit-profile", isAuth, userController.editProfile);
+router.put("/edit-password", isAuth, userController.editPassword);
 export default router;

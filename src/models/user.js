@@ -1,8 +1,7 @@
 import mongoose from "mongoose";
-
-const Schema = mongoose.Schema;
-
-const userSchema = new Schema({
+import AppError from "../utils/error.js";
+const userSchema = new mongoose.Schema(
+  {
     email: {
       type: String,
       required: true,
@@ -52,20 +51,7 @@ const userSchema = new Schema({
   },
   { timestamps: true }
 );
-userSchema.statics.getByID = async function (userID) {
-  try {
-    const user = await this.findOne({ _id: userID });
-    // const user = await this.findOne({ _id: userID });
-    if (!user) {
-      const error = new AppError(404, "USER_NOT_FOUND");
-      throw error;
-    }
-    console.log(user);
-    return user;
-  } catch (error) {
-    throw error;
-  }
-};
+
 // userSchema.statics.getById = async (id, select, options) => {
 //     try {
 //         const user = await User.findById(id, select).populate(options);

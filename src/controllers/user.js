@@ -4,7 +4,7 @@ import { userService } from "../services/user.js";
 const getProfile = async (req, res, next) => {
   const userId = req.userId;
   try {
-    const user = await userService.getByID(userID);
+    const user = await userService.getByID(userId);
     // console.log(user.cart.products);
     res.status(200).json(user);
   } catch (error) {
@@ -12,7 +12,7 @@ const getProfile = async (req, res, next) => {
   }
 };
 
-const changeProfile = async (req, res, next) => {
+const editProfile = async (req, res, next) => {
   const userId = req.userId;
   const update = req.body;
   try {
@@ -23,16 +23,20 @@ const changeProfile = async (req, res, next) => {
   }
 };
 
-const changePassword = async (req, res, next) => {
-  // change password will reset token
+const editPassword = async (req, res, next) => {
+  // change password will get new token
   const userId = req.userId;
-  const newPassword = req.body;
+  const oldPassword = req.body.oldPassword;
+  const newPassword = req.body.newPassword;
   try {
-    const token = await userService.changePassword(userId, newPassword);
-    res.status(200).json({ message: "UPDATE_SUCCESSFULLY" });
-    return token;
+    const token = await userService.editPassword(
+      userId,
+      oldPassword,
+      newPassword
+    );
+    res.status(200).json({ jwt: token });
   } catch (error) {
     next(error);
   }
 };
-export const userController = { getProfile, changeProfile, changePassword };
+export const userController = { getProfile, editProfile, editPassword };

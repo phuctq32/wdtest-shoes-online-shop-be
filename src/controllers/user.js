@@ -1,7 +1,7 @@
 import User from "../models/user.js";
-import AppError from "../utils/error.js";
+import * as userService from "../services/user.js";
 
-const getUserProfile = async (req, res, next) => {
+export const getUserProfile = async (req, res, next) => {
   const userId = req.userId;
   try {
     const user = await User.getByID(userId);
@@ -12,4 +12,16 @@ const getUserProfile = async (req, res, next) => {
   }
 };
 
-export const userController = { getUserProfile };
+export const addToCart = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    const item = { productId: req.body.productId, quantity: req.body.quantity }
+
+    const updatedCart = await userService.addToCart(userId, item);
+
+    res.status(200).json({ updatedCart });
+  } catch (err) {
+    next(err);
+  }
+}
+

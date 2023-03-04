@@ -1,13 +1,15 @@
 import { Router } from "express";
 import isAuth from "../middlewares/isAuth.js";
 import * as userController from "../controllers/user.js";
+import { changePwValidation } from "../validations/user.js";
+import validationErrorHandler from "../middlewares/validationErrorHandler.js";
 const router = Router();
 
-router.get("/user/profile", isAuth, userController.getProfile);
+router.get("/user/profile", isAuth, userController.getUserProfile);
 
 router.put("/user/edit", isAuth, userController.editProfile);
 
-router.put("/user/change-password", isAuth, userController.editPassword);
+router.put("/user/change-password", isAuth, changePwValidation, validationErrorHandler, userController.editPassword);
 
 router.get("/user/cart", isAuth, userController.getCart);
 

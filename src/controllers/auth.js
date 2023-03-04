@@ -3,9 +3,9 @@ import * as authService from "../services/auth.js";
 export const login = async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    const { user, token } = await authService.login(email, password);
-    console.log(token);
-    res.status(200).json({ jwt: token, user });
+    const token = await authService.login(email, password);
+    
+    res.status(200).json({ jwt: token });
   } catch (error) {
     next(error);
   }

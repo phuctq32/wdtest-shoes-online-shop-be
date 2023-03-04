@@ -20,7 +20,7 @@ export const login = async (email, password) => {
       const error = new AppError(401, "Unauthorized");
       throw error;
     }
-    console.log(process.env.SECRET_KEY);
+    
     const token = jwt.sign(
       { email: email, userId: user._id.toString(), role: user.role },
       process.env.SECRET_KEY,

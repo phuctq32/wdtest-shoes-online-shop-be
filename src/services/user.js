@@ -1,3 +1,4 @@
+import bcrypt from "bcryptjs";
 import User from "../models/user.js";
 import AppError from "../utils/error.js";
 
@@ -7,6 +8,8 @@ export const getUser = async (userId) => {
         if (!user) {
             throw new AppError(404, "User not found");
         }
+
+        await (await user.populate("cart.productId", "-sizes -description -status")).populate("cart.productId.brand", "-description");
 
         return user;
     } catch (err) {
@@ -40,6 +43,9 @@ export const getCart = async (userId) => {
 export const edit = async (userId, update) => {
     try {
       const user = await User.findById(userId);
+      if (!user) {
+        throw new AppError(404, "User not found");
+    }
       if (update.name) {
         user.name = update.name;
       }
@@ -50,7 +56,6 @@ export const edit = async (userId, update) => {
         user.address = update.address;
       }
       await user.save();
-      console.log(user);
       return user;
     } catch (error) {
       throw error;
@@ -61,23 +66,25 @@ export const editPassword = async (userId, oldPassword, newPassword) => {
     try {
       const user = await User.findById(userId);
       if (!user) {
-        const error = new AppError(404, "USER_NOT_FOUND");
+        const error = new AppError(404, "User not found");
         throw error;
       }
       const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+
       if (!isPasswordValid) {
-        const error = new AppError(409, "WRONG_PASSWORD");
-        next(error);
+        const error = new AppError(409, "Current password is wrong");
+        throw error;
       }
-      const hashedPassword = await bcrypt.hash(newPassword, 7);
+
+      if (newPassword === oldPassword) {
+        throw new AppError(400, "New password is matches old password");
+      }
+      
+      const hashedPassword = await bcrypt.hash(newPassword, 12);
       user.password = hashedPassword;
       await user.save();
-      const token = jwt.sign(
-        { email: user.email, userId: user._id.toString(), role: user.role },
-        process.env.SECRET_KEY,
-        { expiresIn: "2h" }
-      );
-      return token;
+
+      return
     } catch (error) {
       throw error;
     }
@@ -93,7 +100,7 @@ export const addToCart = async (userId, item) => {
         
         const updatedCart = user.cart;
         const existingProductIndex = updatedCart.findIndex(cartItem => ((cartItem.productId.toString() === item.productId.toString()) && (cartItem.size === item.size)));
-        console.log(existingProductIndex);
+        
         if (existingProductIndex > -1) {
             updatedCart[existingProductIndex].quantity += item.quantity;
         } else {
@@ -133,7 +140,6 @@ export const getCartPrice = async (userId) => {
 
         await user.populate('cart.productId', 'price discount');
         const totalPrice = user.cart.reduce((result, cartItem) => result + cartItem.productId.price * (1 - cartItem.productId.discount) * cartItem.quantity, 0);
-        console.log(totalPrice);
 
         return totalPrice;
     } catch (err) {

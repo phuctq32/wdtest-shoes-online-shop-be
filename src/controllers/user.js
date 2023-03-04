@@ -56,21 +56,17 @@ export const editPassword = async (req, res, next) => {
   const userId = req.userId;
   const oldPassword = req.body.oldPassword;
   const newPassword = req.body.newPassword;
-  if (!oldPassword || !newPassword) {
-    const error = new AppError(400, "MISSING_PASSWORD");
-    next(error);
-  }
+
   try {
-    const token = await userService.editPassword(
+    await userService.editPassword(
       userId,
       oldPassword,
       newPassword
     );
-    res.status(200).json({ jwt: token });
+    res.status(200).json({ message: "Changed password successfully" });
   } catch (error) {
     next(error);
   }
-  
 }
 
 export const getCartPrice = async (req, res, next) => {

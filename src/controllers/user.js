@@ -12,6 +12,16 @@ export const getUserProfile = async (req, res, next) => {
   }
 };
 
+export const getCart = async (req, res, next) => {
+  try {
+    const cart = await userService.getCart(req.userId);
+
+    res.status(200).json({ cart });
+  } catch (err) {
+    next(err);
+  }
+}
+
 export const addToCart = async (req, res, next) => {
   try {
     const userId = req.userId;

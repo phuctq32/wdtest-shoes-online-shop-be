@@ -7,7 +7,7 @@ const router = Router();
 router.get("/profile", isAuth, userController.getUserProfile);
 router.get("/is-admin", isAuth, isAdmin);
 
-router.get("/users/cart", isAuth);
+router.get("/users/cart", isAuth, userController.getCart);
 
 router.get("/users/cart/total-price", isAuth, userController.getCartPrice);
 

@@ -4,7 +4,7 @@ export const createProduct = async (req, res, next) => {
   try {
     const productData = {
       name: req.body.name,
-      brandName: req.body.brandName,
+      brand: req.body.brand,
       shoeCode: req.body.shoeCode,
       description: req.body.description,
       sizes: req.body.sizes,

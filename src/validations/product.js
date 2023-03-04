@@ -2,7 +2,7 @@ import { body } from "express-validator";
 
 const productValidations = [
     body("name").trim().notEmpty().withMessage("Name is not empty"),
-    body("brandName").trim().notEmpty().withMessage("Brand name is not empty"),
+    body("brand").trim().notEmpty().withMessage("BrandId is not empty").isMongoId(),
     body("shoeCode").trim().notEmpty().withMessage("Shoe code is not empty"),
     body("price").custom((value, { req }) => {
         if (parseFloat(value) <= 0) {

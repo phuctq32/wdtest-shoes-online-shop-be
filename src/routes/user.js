@@ -4,7 +4,7 @@ import isAdmin from "../middlewares/isAdmin.js";
 import * as userController from "../controllers/user.js";
 const router = Router();
 
-router.get("/profile", isAuth, userController.getUserProfile);
+//router.get("/profile", isAuth, userController.getUserProfile);
 router.get("/is-admin", isAuth, isAdmin);
 
 router.get("/users/cart", isAuth, userController.getCart);

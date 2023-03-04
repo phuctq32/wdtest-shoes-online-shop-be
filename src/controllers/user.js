@@ -45,3 +45,14 @@ export const getCartPrice = async (req, res, next) => {
   }
 }
 
+export const updateQuantity = async (req, res, next) => {
+  try {
+    const item = { productId: req.body.productId, quantity: req.body.quantity };
+    await userService.updateQuantity(req.userId, item);
+
+    res.status(200).json({ message: "Updated item's quantity successfully" });
+  } catch (err) {
+    next(err);
+  }
+}
+

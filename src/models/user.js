@@ -34,7 +34,10 @@ const userSchema = new Schema({
           ref: "Product",
           required: true,
         },
-        size: { type: String },
+        size: { 
+          type: String, 
+          required: true 
+        },
         quantity: {
           type: Number,
           required: true,

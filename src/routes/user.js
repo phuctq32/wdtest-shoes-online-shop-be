@@ -13,7 +13,7 @@ router.get("/users/cart/total-price", isAuth, userController.getCartPrice);
 
 router.put("/users/cart/add", isAuth, userController.addToCart);
 
-router.put("/users/cart/update-quantity", isAuth);
+router.put("/users/cart/update-quantity", isAuth, userController.updateQuantity);
 
 router.put("/users/cart/remove", isAuth);
 

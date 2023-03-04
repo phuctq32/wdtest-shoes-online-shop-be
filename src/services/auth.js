@@ -20,12 +20,14 @@ export const login = async (email, password) => {
       const error = new AppError(401, "Unauthorized");
       throw error;
     }
-
-    const token = jwt.sign({ email: email, userId: user._id.toString(), role: user.role }, process.env.SECRET_KEY, {
-      expiresIn: "24h",
-    });
-
-    return { user, token };
+    console.log(process.env.SECRET_KEY);
+    const token = jwt.sign(
+      { email: email, userId: user._id.toString(), role: user.role },
+      process.env.SECRET_KEY,
+      { expiresIn: "2h" }
+    );
+    console.log(token);
+    return token;
   } catch (error) {
     throw error;
   }
@@ -48,7 +50,6 @@ export const signup = async (userData) => {
     });
 
     await user.save();
-    return user;
   } catch (err) {
     throw err;
   }

@@ -1,4 +1,3 @@
-import User from "../models/user.js";
 import * as userService from "../services/user.js";
 
 export const getUserProfile = async (req, res, next) => {

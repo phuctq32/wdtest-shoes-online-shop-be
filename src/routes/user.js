@@ -3,7 +3,11 @@ import isAuth from "../middlewares/isAuth.js";
 import * as userController from "../controllers/user.js";
 const router = Router();
 
-router.get("/user/profile", isAuth, userController.getUserProfile);
+router.get("/user/profile", isAuth, userController.getProfile);
+
+router.put("/user/edit", isAuth, userController.editProfile);
+
+router.put("/user/change-password", isAuth, userController.editPassword);
 
 router.get("/user/cart", isAuth, userController.getCart);
 

@@ -3,52 +3,53 @@ import * as authService from "../services/auth.js";
 export const login = async (req, res, next) => {
   const { email, password } = req.body;
   try {
-    const token = await authService.login(email, password);
-    res.status(200).json({ jwt: token });
+    const { user, token } = await authService.login(email, password);
+    console.log(token);
+    res.status(200).json({ jwt: token, user });
   } catch (error) {
     next(error);
   }
 };
 
 export const signup = async (req, res, next) => {
-    try {
-        const userData = {
-            email: req.body.email,
-            name: req.body.name,
-            password: req.body.password,
-            phone: req.body.phone,
-            address: req.body.address
-        }
+  try {
+    const userData = {
+      email: req.body.email,
+      name: req.body.name,
+      password: req.body.password,
+      phone: req.body.phone,
+      address: req.body.address,
+    };
 
-        await authService.signup(userData);
+    const user = await authService.signup(userData);
 
-        res.status(201).json({ message: "Sucessfully register" });
-    } catch (err) {
-        next(err);
-    }
-}
+    res.status(201).json({ user, message: "Sucessfully register" });
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const forgotPassword = async (req, res, next) => {
-    try {
-        const token = await authService.forgotPassword(req.body.email);
+  try {
+    const token = await authService.forgotPassword(req.body.email);
 
-        res.status(200).json({
-            message: 'An email was sent to your email account. Please check to reset your password!',
-            token: token,
-        })
-    } catch (err) {
-        next(err);
-    }
-}
+    res.status(200).json({
+      message: "An email was sent to your email account. Please check to reset your password!",
+      token: token,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 export const resetPassword = async (req, res, next) => {
-    try {
-        await authService.resetPassword(req.params.token, req.body.password);
+  try {
+    await authService.resetPassword(req.params.token, req.body.password);
 
-        res.status(200).json({
-            message: 'Reset password successfully!'
-        });
-    } catch (err) {
-        next(err);
-    }
-}
+    res.status(200).json({
+      message: "Reset password successfully!",
+    });
+  } catch (err) {
+    next(err);
+  }
+};

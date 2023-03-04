@@ -17,7 +17,6 @@ router.put("/users/cart/update-quantity", isAuth, userController.updateQuantity)
 
 router.put("/users/cart/remove", isAuth);
 
-router.put("users/cart/remove-all", isAuth);
-
+router.put("/users/cart/remove-all", isAuth);
 
 export default router;

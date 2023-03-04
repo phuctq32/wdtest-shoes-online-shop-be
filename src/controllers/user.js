@@ -1,12 +1,11 @@
 import User from "../models/user.js";
 import * as userService from "../services/user.js";
 
-const getUserProfile = async (req, res, next) => {
-  const userId = req.userId;
+export const getUserProfile = async (req, res, next) => {
+  const userId = req.userID;
 
   try {
     const user = await User.getByID(userId);
-    // console.log(user.cart.products);
     res.status(200).json({ user: user });
   } catch (error) {
     next(error);

@@ -13,11 +13,23 @@ export const getUserProfile = async (req, res, next) => {
 };
 
 export const getCart = async (req, res, next) => {
+  
   try {
     const cart = await userService.getCart(req.userId);
-
+    
     res.status(200).json({ cart });
   } catch (err) {
+    next(err);
+  }
+};
+
+export const editProfile = async (req, res, next) => {
+  const userId = req.userId;
+  const { name, phone, address } = req.body;
+  try {
+    await userService.edit(userId, { name, phone, address });
+    res.status(200).json({ message: "UPDATE_SUCCESSFULLY" });
+  } catch (error) {
     next(err);
   }
 };
@@ -38,6 +50,28 @@ export const addToCart = async (req, res, next) => {
     next(err);
   }
 };
+
+export const editPassword = async (req, res, next) => {
+  // change password will get new token
+  const userId = req.userId;
+  const oldPassword = req.body.oldPassword;
+  const newPassword = req.body.newPassword;
+  if (!oldPassword || !newPassword) {
+    const error = new AppError(400, "MISSING_PASSWORD");
+    next(error);
+  }
+  try {
+    const token = await userService.editPassword(
+      userId,
+      oldPassword,
+      newPassword
+    );
+    res.status(200).json({ jwt: token });
+  } catch (error) {
+    next(error);
+  }
+  
+}
 
 export const getCartPrice = async (req, res, next) => {
   try {

@@ -62,3 +62,13 @@ export const getProductById = async (id) => {
     throw err;
   }
 };
+
+export const searchProduct = async (searchTerm) => {
+  try {
+    const product = await Product.find({ name: searchTerm });
+    console.log(product);
+    return product;
+  } catch (error) {
+    throw error;
+  }
+};

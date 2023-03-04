@@ -40,7 +40,6 @@ export const getProducts = async (req, res, next) => {
       limit,
       brandName,
     };
-    console.log(brandName);
     const products = await productService.getProductsWithConditions(filter);
 
     res.status(200).json({ products });
@@ -59,5 +58,19 @@ export const getProductById = async (req, res, next) => {
     res.status(200).json({ product });
   } catch (err) {
     next(err);
+  }
+};
+
+export const searchProduct = async (req, res, next) => {
+  try {
+    const search = req.query.search;
+    const searchTerm = search.split(" ");
+    const keyword = searchTerm
+      .map((key) => "(" + key + ")")
+      .reduce((a, c) => a + "|" + c);
+    const result = await productService.searchProduct(new RegExp(keyword, "i"));
+    res.status(200).json(result);
+  } catch (error) {
+    next(error);
   }
 };

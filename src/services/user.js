@@ -36,7 +36,52 @@ export const getCart = async (userId) => {
     } catch (err) {
         throw err;
     }
-}
+};
+export const edit = async (userId, update) => {
+    try {
+      const user = await User.findById(userId);
+      if (update.name) {
+        user.name = update.name;
+      }
+      if (update.phone) {
+        user.phone = update.phone;
+      }
+      if (update.address) {
+        user.address = update.address;
+      }
+      await user.save();
+      console.log(user);
+      return user;
+    } catch (error) {
+      throw error;
+    }
+  };
+  
+export const editPassword = async (userId, oldPassword, newPassword) => {
+    try {
+      const user = await User.findById(userId);
+      if (!user) {
+        const error = new AppError(404, "USER_NOT_FOUND");
+        throw error;
+      }
+      const isPasswordValid = await bcrypt.compare(oldPassword, user.password);
+      if (!isPasswordValid) {
+        const error = new AppError(409, "WRONG_PASSWORD");
+        next(error);
+      }
+      const hashedPassword = await bcrypt.hash(newPassword, 7);
+      user.password = hashedPassword;
+      await user.save();
+      const token = jwt.sign(
+        { email: user.email, userId: user._id.toString(), role: user.role },
+        process.env.SECRET_KEY,
+        { expiresIn: "2h" }
+      );
+      return token;
+    } catch (error) {
+      throw error;
+    }
+  };
 
 export const addToCart = async (userId, item) => {
     try {

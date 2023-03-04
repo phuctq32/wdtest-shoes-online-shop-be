@@ -3,7 +3,6 @@ import * as userService from "../services/user.js";
 
 export const getUserProfile = async (req, res, next) => {
   const userId = req.userId;
-  console.log(userId);
 
   try {
     const user = await userService.getUser(userId);

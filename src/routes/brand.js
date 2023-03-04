@@ -9,4 +9,10 @@ const router = Router();
 // POST
 router.post("/brands/create", isAuth, isAdmin, brandValidations, brandController.createBrand);
 
+// GET
+router.get("/brands", brandController.getBrands);
+
+// PUT
+router.put("/brands/:brandId", isAuth, isAdmin, brandValidations, brandController.updateBrand);
+
 export default router;

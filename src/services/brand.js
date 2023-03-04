@@ -21,3 +21,34 @@ export const createBrand = async (data) => {
         next(err);
     }
 }
+
+export const getBrands = async (data) => {
+    try {
+        const brands = await Brand.find();
+
+        return brands;
+    } catch (err) {
+        next(err);
+    }
+}
+
+export const updateBrand = async (data) => {
+    try {
+        const brand = await Brand.findOne({ name: data.name.toString().toUpperCase() });
+        if (!brand) {
+            throw new AppError(404, "Resource not found");
+        }
+
+        if (data.name) {
+            brand.name = data.name.toString().toUpperCase();
+        }
+        if (data.description) {
+            brand.description = data.description
+        }
+        await brand.save();
+
+        return brand;
+    } catch (err) {
+        next(err);
+    }
+}

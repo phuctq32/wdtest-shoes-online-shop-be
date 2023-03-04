@@ -3,7 +3,7 @@ import AppError from "../utils/error.js";
 
 export const getUser = async (userId) => {
     try {
-        const user = await User.findById(userId).select("-password -cart");
+        const user = await User.findById(userId).select("-password");
         if (!user) {
             throw new AppError(404, "User not found");
         }

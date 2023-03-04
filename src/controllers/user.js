@@ -25,3 +25,13 @@ export const addToCart = async (req, res, next) => {
   }
 }
 
+export const getCartPrice = async (req, res, next) => {
+  try {
+    const cartPrice = userService.getCartPrice(req.userId);
+
+    res.status(200).json({ cartPrice });
+  } catch (err) {
+    next(err);
+  }
+}
+

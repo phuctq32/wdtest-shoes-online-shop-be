@@ -33,3 +33,21 @@ export const addToCart = async (userId, item) => {
         throw err;
     }
 }
+
+export const getCartPrice = async (userId) => {
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            throw new AppError(404, "User not found");
+        }
+
+        await user.populate('cart.productId', '-description -status');
+        const totalPrice = user.cart.reduce((result, cartItem) =>{
+            result += cartItem.productId.price * (1 - cartItem.productId.discount) * cartItem.quantity
+        }, 0);
+
+        return totalPrice;
+    } catch (err) {
+        throw err;
+    }
+}

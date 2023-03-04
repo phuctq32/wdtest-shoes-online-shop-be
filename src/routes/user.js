@@ -9,7 +9,7 @@ router.get("/is-admin", isAuth, isAdmin);
 
 router.get("/users/cart", isAuth);
 
-router.get("/users/cart/total-price", isAuth);
+router.get("/users/cart/total-price", isAuth, userController.getCartPrice);
 
 router.put("/users/cart/add", isAuth, userController.addToCart);
 

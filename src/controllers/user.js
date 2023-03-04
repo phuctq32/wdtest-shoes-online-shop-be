@@ -1,9 +1,9 @@
 import User from "../models/user.js";
-import AppError from "../utils/error.js";
+import * as userService from "../services/user.js";
 
 const getUserProfile = async (req, res, next) => {
-  const userId = req.userID;
-  console.log("here", userId);
+  const userId = req.userId;
+
   try {
     const user = await User.getByID(userId);
     // console.log(user.cart.products);
@@ -13,4 +13,46 @@ const getUserProfile = async (req, res, next) => {
   }
 };
 
-export const userController = { getUserProfile };
+export const getCart = async (req, res, next) => {
+  try {
+    const cart = await userService.getCart(req.userId);
+
+    res.status(200).json({ cart });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const addToCart = async (req, res, next) => {
+  try {
+    const userId = req.userId;
+    const item = { productId: req.body.productId, quantity: req.body.quantity };
+
+    const updatedCart = await userService.addToCart(userId, item);
+
+    res.status(200).json({ updatedCart });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getCartPrice = async (req, res, next) => {
+  try {
+    const cartPrice = userService.getCartPrice(req.userId);
+
+    res.status(200).json({ cartPrice });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const updateQuantity = async (req, res, next) => {
+  try {
+    const item = { productId: req.body.productId, quantity: req.body.quantity };
+    await userService.updateQuantity(req.userId, item);
+
+    res.status(200).json({ message: "Updated item's quantity successfully" });
+  } catch (err) {
+    next(err);
+  }
+};

@@ -29,28 +29,24 @@ const userSchema = new Schema(
     address: {
       type: String,
     },
-    cart: {
-      products: [
-        {
-          productId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Product",
-            required: true,
-          },
-          quantity: {
-            type: Number,
-            required: true,
-            default: 1,
-          },
+    cart: [
+      {
+        productId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product",
+          required: true,
         },
-      ],
-      totalPrice: {
-        type: Number,
-        required: true,
-        min: 0,
-        default: 0,
+        size: { 
+          type: String, 
+          required: true 
+        },
+        quantity: {
+          type: Number,
+          required: true,
+          default: 1,
+        },
       },
-    },
+    ]
   },
   { timestamps: true }
 );

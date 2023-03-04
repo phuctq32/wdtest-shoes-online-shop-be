@@ -25,23 +25,24 @@ db.once('open', () => {
 //     if (err) {
 //         console.log(`Error reading file from disk: ${err}`);
 //     } else {
-
-//         // parse JSON string to JSON object
 //         const products = JSON.parse(data);
 
 //         products.forEach(async (prod, index) => {
 //             try {
-//                 const existingBrand = await Brand.findOne({ name: prod.brandname.toString().toUpperCase() });
+//                 const upperBrandName = prod.brandname.toString().trim().toUpperCase();
+//                 const existingBrand = await Brand.findOne({ name: upperBrandName });
+//                 console.log(prod.brandname, existingBrand ? true : false);
 //                 let finalBrand;
 //                 if (!existingBrand) {
 //                     const newBrand = new Brand({
-//                         name: prod.brandname.toString().toUpperCase(),
+//                         name: upperBrandName,
 //                     })
 //                     await newBrand.save();
 //                     finalBrand = newBrand;
 //                 } else {
 //                     finalBrand = existingBrand;
 //                 }
+                
 
 //                 const file = fs.createReadStream(path.join(__dirname, "/anhgiay", `${index + 1}.jpeg`))
 //                 const uploadedImg = await upload(file.path);

@@ -21,7 +21,7 @@ export const login = async (email, password) => {
       throw error;
     }
 
-    const token = jwt.sign({ email: email, userID: user._id.toString(), role: user.role }, process.env.SECRET_KEY, {
+    const token = jwt.sign({ email: email, userId: user._id.toString(), role: user.role }, process.env.SECRET_KEY, {
       expiresIn: "24h",
     });
 

@@ -1,6 +1,7 @@
 import Product from "../models/product.js";
 import Brand from "../models/brand.js";
 import AppError from "../utils/error.js";
+import { removeViAccents } from "../utils/removeAccents.js";
 
 export const createProduct = async (productData) => {
   try {
@@ -63,11 +64,32 @@ export const getProductById = async (id) => {
   }
 };
 
-export const searchProduct = async (searchTerm) => {
+export const searchProduct = async (searchStr, filter) => {
   try {
-    const product = await Product.find({ name: searchTerm });
-    console.log(product);
-    return product;
+    // search with regex
+    // const products = await Product.find({
+    //     $or: [
+    //         { name : { $regex: searchStr, $options: 'i' } },
+    //         { shoeCode : { $regex: searchStr, $options: 'i' } }
+    //     ]
+    // });
+
+    // text search
+    const products = await Product.find(
+        {
+            $text: {
+                $search: removeViAccents(searchStr),
+                $caseSensitive: false,
+                $diacriticSensitive: false
+            }
+        },
+        { score: { $meta: "textScore" } }
+    )
+    .sort({ score: { $meta: "textScore" } })
+    .skip((filter.page - 1) * filter.limit)
+    .limit(filter.limit);
+
+    return products;
   } catch (error) {
     throw error;
   }

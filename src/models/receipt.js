@@ -10,8 +10,9 @@ const receiptSchema = new mongoose.Schema({
                 required: true,
             },
             name: { type: String, required: true },
-            price: { type: String, required: true },
-            quantity: { type: Number, required: true }
+            size: { type: String, required: true },
+            quantity: { type: Number, required: true },
+            unitPrice: { type: String, required: true } // price after discount
         }
     ],
     state: {

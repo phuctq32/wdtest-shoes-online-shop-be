@@ -1,6 +1,6 @@
 import { body } from "express-validator";
 
-const orderValidations = [
+const receiptValidations = [
     body("products").custom((products, { req }) => {
         Array.from(products).forEach(product => {
             if (!product.productID) {
@@ -34,5 +34,5 @@ const orderValidations = [
 ];
 
 export {
-    orderValidations
+    receiptValidations
 }

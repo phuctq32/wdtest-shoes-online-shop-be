@@ -29,9 +29,9 @@ Then, create a `.env` file in your project directory and add the variables in `.
 
 On branch `master`, run command: 
 ```
-$ node src/server.js
+$ npm start
 ```
 or:
 ```
-$ nodemon src/server.js
+$ npm run start:dev
 ```

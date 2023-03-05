@@ -77,7 +77,9 @@ export const getReceiptsByUserId = async (userId) => {
             throw new AppError(404, "User not found");
         }
 
-        const receipts = await Receipt.find({ userId: user._id });
+        const receipts = await Receipt.find({ userId: user._id })
+            .populate("products.productId", "name shoeCode brand image")
+            .populate("products.productId.brand", "name");
 
         return receipts;
     } catch (err) {

@@ -158,6 +158,16 @@ export const updateQuantity = async (userId, item) => {
       throw new AppError(404, "User not found");
     }
 
+    if (item.quantity === 0) {
+      user.cart = user.cart.filter(
+        (cartItem) =>
+          (cartItem.productId._id.toString() === item.productId && cartItem.size !== item.size) ||
+          cartItem.productId._id.toString() !== item.productId
+      );
+      await user.save();
+      return user.cart;
+    }
+
     await user.populate("cart.productId", "-sizes -description -status");
     const productIds = user.cart.map((cartItem) => cartItem.productId._id.toString());
     const cartItemSizes = user.cart.map((cartItem) => cartItem.size);
@@ -185,16 +195,15 @@ export const removeCartItem = async (userId, itemToRemove) => {
     }
 
     await user.populate("cart.productId", "price discount");
-    const existingCartItem = user.cart.find(cartItem => 
-        cartItem.productId._id.toString() === itemToRemove.productId &&
-        cartItem.size === itemToRemove.size
+    const existingCartItem = user.cart.find(
+      (cartItem) => cartItem.productId._id.toString() === itemToRemove.productId && cartItem.size === itemToRemove.size
     );
 
     if (!existingCartItem) {
-        throw new AppError(400, "Product not found in cart");
+      throw new AppError(400, "Product not found in cart");
     }
 
-    user.cart = user.cart.filter(cartItem => cartItem !== existingCartItem);
+    user.cart = user.cart.filter((cartItem) => cartItem !== existingCartItem);
     await user.save();
 
     return user.cart;
@@ -204,39 +213,38 @@ export const removeCartItem = async (userId, itemToRemove) => {
 };
 
 export const removeCartItems = async (userId, itemsToRemove) => {
-    try {
-      const user = await User.findById(userId);
-      if (!user) {
-        throw new AppError(404, "User not found");
-      }
-  
-      await user.populate("cart.productId", "price discount");
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new AppError(404, "User not found");
+    }
 
-    //   const testItem = user.cart.find(cartItem => 
+    await user.populate("cart.productId", "price discount");
+
+    //   const testItem = user.cart.find(cartItem =>
     //     cartItem.productId._id.toString() === itemsToRemove[1].productId &
     //     cartItem.size === itemsToRemove[1].size
     // );
     // console.log("test item: ", testItem);
 
-      for (const item of itemsToRemove) {
-        const existingCartItem = user.cart.find(cartItem => 
-            cartItem.productId._id.toString() === item.productId &&
-            cartItem.size === item.size
-        );
+    for (const item of itemsToRemove) {
+      const existingCartItem = user.cart.find(
+        (cartItem) => cartItem.productId._id.toString() === item.productId && cartItem.size === item.size
+      );
 
-        if (!existingCartItem) {
-            throw new AppError(400, "Product not found in cart");
-        }
-
-        user.cart = user.cart.filter(cartItem => cartItem !== existingCartItem);
+      if (!existingCartItem) {
+        throw new AppError(400, "Product not found in cart");
       }
-      await user.save();
-  
-      return user.cart;
-    } catch (err) {
-      throw err;
+
+      user.cart = user.cart.filter((cartItem) => cartItem !== existingCartItem);
     }
-  };
+    await user.save();
+
+    return user.cart;
+  } catch (err) {
+    throw err;
+  }
+};
 
 export const removeAllCartItems = async (userId) => {
   try {

@@ -185,15 +185,16 @@ export const removeCartItem = async (userId, itemToRemove) => {
     }
 
     await user.populate("cart.productId", "price discount");
-    const productIds = user.cart.map((cartItem) => cartItem.productId);
-    const cartItemSizes = user.cart.map((cartItem) => cartItem.size);
-    if (!productIds.includes(itemToRemove.productId) || !cartItemSizes.includes(itemToRemove.size)) {
-      throw new AppError(400, "Product not found in cart");
-    }
-    user.cart = user.cart.filter(
-      (cartItem) =>
-        cartItem.productId.toString() === itemToRemove.productId.toString() && cartItem.size === itemToRemove.size
+    const existingCartItem = user.cart.find(cartItem => 
+        cartItem.productId._id.toString() === itemToRemove.productId &&
+        cartItem.size === itemToRemove.size
     );
+
+    if (!existingCartItem) {
+        throw new AppError(400, "Product not found in cart");
+    }
+
+    user.cart = user.cart.filter(cartItem => cartItem !== existingCartItem);
     await user.save();
 
     return user.cart;
@@ -201,6 +202,41 @@ export const removeCartItem = async (userId, itemToRemove) => {
     throw err;
   }
 };
+
+export const removeCartItems = async (userId, itemsToRemove) => {
+    try {
+      const user = await User.findById(userId);
+      if (!user) {
+        throw new AppError(404, "User not found");
+      }
+  
+      await user.populate("cart.productId", "price discount");
+
+    //   const testItem = user.cart.find(cartItem => 
+    //     cartItem.productId._id.toString() === itemsToRemove[1].productId &
+    //     cartItem.size === itemsToRemove[1].size
+    // );
+    // console.log("test item: ", testItem);
+
+      for (const item of itemsToRemove) {
+        const existingCartItem = user.cart.find(cartItem => 
+            cartItem.productId._id.toString() === item.productId &&
+            cartItem.size === item.size
+        );
+
+        if (!existingCartItem) {
+            throw new AppError(400, "Product not found in cart");
+        }
+
+        user.cart = user.cart.filter(cartItem => cartItem !== existingCartItem);
+      }
+      await user.save();
+  
+      return user.cart;
+    } catch (err) {
+      throw err;
+    }
+  };
 
 export const removeAllCartItems = async (userId) => {
   try {

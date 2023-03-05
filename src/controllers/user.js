@@ -103,6 +103,17 @@ export const removeCartItem = async (req, res, next) => {
   }
 };
 
+export const removeCartItems = async (req, res, next) => {
+  try {
+    const items = req.body.items;
+    const updatedCart = await userService.removeCartItems(req.userId, items);
+
+    res.status(200).json({ message: "Removed cart item", cart: updatedCart });
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const removeAllCartItems = async (req, res, next) => {
   try {
     await userService.removeAllCartItems(req.userId);

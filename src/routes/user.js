@@ -21,6 +21,8 @@ router.put("/user/cart/update-quantity", isAuth, userController.updateQuantity);
 
 router.put("/user/cart/remove", isAuth, userController.removeCartItem);
 
+router.put("/user/cart/remove-some", isAuth, userController.removeCartItems);
+
 router.put("/user/cart/remove-all", isAuth, userController.removeAllCartItems);
 
 

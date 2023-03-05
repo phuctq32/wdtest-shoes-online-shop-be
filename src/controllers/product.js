@@ -63,7 +63,7 @@ export const getProductById = async (req, res, next) => {
 
 export const searchProduct = async (req, res, next) => {
   try {
-    const search = req.query.search;
+    const search = req.query.q;
     const searchTerm = search.split(" ");
     const keyword = searchTerm
       .map((key) => "(" + key + ")")

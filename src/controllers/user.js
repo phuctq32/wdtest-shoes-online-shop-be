@@ -13,10 +13,9 @@ export const getUserProfile = async (req, res, next) => {
 };
 
 export const getCart = async (req, res, next) => {
-  
   try {
     const cart = await userService.getCart(req.userId);
-    
+
     res.status(200).json({ cart });
   } catch (err) {
     next(err);
@@ -37,15 +36,15 @@ export const editProfile = async (req, res, next) => {
 export const addToCart = async (req, res, next) => {
   try {
     const userId = req.userId;
-    const item = { 
+    const item = {
       productId: req.body.productId,
       size: req.body.size,
-      quantity: req.body.quantity 
+      quantity: req.body.quantity,
     };
 
     const updatedCart = await userService.addToCart(userId, item);
 
-    res.status(200).json({ updatedCart });
+    res.status(200).json({ cart: updatedCart });
   } catch (err) {
     next(err);
   }
@@ -58,16 +57,12 @@ export const editPassword = async (req, res, next) => {
   const newPassword = req.body.newPassword;
 
   try {
-    await userService.editPassword(
-      userId,
-      oldPassword,
-      newPassword
-    );
+    await userService.editPassword(userId, oldPassword, newPassword);
     res.status(200).json({ message: "Changed password successfully" });
   } catch (error) {
     next(error);
   }
-}
+};
 
 export const getCartPrice = async (req, res, next) => {
   try {
@@ -81,14 +76,14 @@ export const getCartPrice = async (req, res, next) => {
 
 export const updateQuantity = async (req, res, next) => {
   try {
-    const item = { 
+    const item = {
       productId: req.body.productId,
       size: req.body.size,
-      quantity: req.body.quantity 
+      quantity: req.body.quantity,
     };
-    await userService.updateQuantity(req.userId, item);
+    const updatedCart = await userService.updateQuantity(req.userId, item);
 
-    res.status(200).json({ message: "Updated item's quantity successfully" });
+    res.status(200).json({ message: "Updated item's quantity successfully", cart: updatedCart });
   } catch (err) {
     next(err);
   }
@@ -96,17 +91,17 @@ export const updateQuantity = async (req, res, next) => {
 
 export const removeCartItem = async (req, res, next) => {
   try {
-    const item = { 
+    const item = {
       productId: req.body.productId,
       size: req.body.size,
     };
-    await userService.removeCartItem(req.userId, item);
+    const updatedCart = await userService.removeCartItem(req.userId, item);
 
-    res.status(200).json({ message: "Removed cart item" });
+    res.status(200).json({ message: "Removed cart item", cart: updatedCart });
   } catch (err) {
     next(err);
   }
-}
+};
 
 export const removeAllCartItems = async (req, res, next) => {
   try {
@@ -116,4 +111,4 @@ export const removeAllCartItems = async (req, res, next) => {
   } catch (err) {
     next(err);
   }
-}
+};

@@ -219,7 +219,7 @@ export const removeCartItems = async (userId, itemsToRemove) => {
       throw new AppError(404, "User not found");
     }
 
-    await user.populate("cart.productId", "price discount");
+    await user.populate("cart.productId");
 
     //   const testItem = user.cart.find(cartItem =>
     //     cartItem.productId._id.toString() === itemsToRemove[1].productId &

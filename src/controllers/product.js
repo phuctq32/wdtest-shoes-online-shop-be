@@ -63,13 +63,21 @@ export const getProductById = async (req, res, next) => {
 
 export const searchProduct = async (req, res, next) => {
   try {
-    const search = req.query.q;
-    const searchTerm = search.split(" ");
-    const keyword = searchTerm
-      .map((key) => "(" + key + ")")
-      .reduce((a, c) => a + "|" + c);
-    const result = await productService.searchProduct(new RegExp(keyword, "i"));
-    res.status(200).json(result);
+    const searchStr = req.query.q;
+    let page = req.query.page ? parseInt(req.query.page) : null;
+    if (page & (page <= 0)) {
+      page = 1;
+    }
+
+    let limit = req.query.limit ? parseInt(req.query.limit) : null;
+    if (limit & (limit <= 0)) {
+      limit = 16;
+    }
+
+    const filter = { page, limit }
+    const products = await productService.searchProduct(searchStr, filter);
+
+    res.status(200).json({products});
   } catch (error) {
     next(error);
   }

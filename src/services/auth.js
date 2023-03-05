@@ -82,7 +82,7 @@ export const forgotPassword = async (recipientEmail) => {
       from: process.env.EMAIL,
       to: recipientEmail,
       subject: "Reset Password",
-      html: get_html_reset_password(`http://localhost:8080/reset-password/${token.value}`),
+      html: get_html_reset_password(`${process.env.HOST}/reset-password/${token.value}`),
     });
 
     return token.value;

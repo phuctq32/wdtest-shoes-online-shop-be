@@ -5,7 +5,7 @@ import { receiptValidations } from "../validations/receipt.js";
 
 const router = Router();
 
-router.post('/receipts', receiptValidations, receiptController.createReceipt);
+router.post('/receipts', isAuth, receiptValidations, receiptController.createReceipt);
 
 router.get('/receipts', isAuth, receiptController.getReceiptsByUserId);
 
